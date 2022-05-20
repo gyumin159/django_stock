@@ -1,0 +1,9 @@
+{% extends 'stock/base_stock.html' %}
+{% block contents %}
+<div class="p-5 container">
+	<form class="d-flex" action="{% url 'stock-search' %}" method="get">
+		<input class="form-control me-2" type="search" placeholder="종목검색" name="kw">
+		<button class="btn btn-outline-primary text-nowrap" type="submit">검색</button>
+	</form>
+</div>
+{% endblock %}

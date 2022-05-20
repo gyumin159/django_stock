@@ -1,0 +1,16 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+{% block contents %}
+	<div class="mt-5 p-3">
+		<form method="POST">
+			{% csrf_token %}
+			<fieldset class="form-group">
+				<legend>포스트 작성</legend>
+				{{form|crispy}}
+			</fieldset>
+			<div>
+				<button class="btn btn-primary" type="submit">작성</button>
+			</div>
+		</form>
+	</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+{% block contents %}
+	<div class="mt-5 p-3">
+		<form method="POST">
+			{% csrf_token %}
+			<fieldset class="form-group">
+				<legend>포스트 삭제</legend>
+				<h2>포스트를 삭제하시겠습니까? - {{object.title}}</h2>
+			</fieldset>
+			<div>
+				<button class="btn btn-danger" type="submit">삭제</button>
+				<a class="btn btn-secondary" href="{% url 'blog-home'  %}">취소</a>
+			</div>
+		</form>
+	</div>
+{% endblock %}

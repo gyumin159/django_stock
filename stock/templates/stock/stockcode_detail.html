@@ -1,0 +1,30 @@
+{% extends 'stock/base_stock.html' %}
+{% block contents %}
+	<div class="container bg-secondary bg-opacity-25">
+		<div class="border p-5">
+			<p class="fw-bold fs-3">{{object.company_name}} - <small class="text-muted">{{object.company_code}}</small></p>
+			<div class="list-group">
+				<a href="#" class="list-group-item list-group-item-action">{{object.stock_market_type}}</a>
+				<ul class="list-group-item">
+					<li class="list-group-item">{{object.business_type}}</li>
+					<li class="list-group-item">
+						{{object.business_type_code}} <small class="text-muted">업종코드</small>
+					</li>
+				</ul>
+			</div>
+			{% if object in user.interested_code.all %}
+				<form action="{% url 'stock-register' %}" method="get">
+					<input type="hidden" name="next" value="{{ request.get_full_path }}">
+					<input type="hidden" value={{object.company_code}} name='company_code_del'>
+					<button class="btn btn-primary" type="submit">관심목록에서 삭제</button>
+				</form>
+			{% else %}
+				<form action="{% url 'stock-register' %}" method="get">
+					<input type="hidden" name="next" value="{{ request.get_full_path }}">
+					<input type="hidden" value={{object.company_code}} name='company_code_add'>
+					<button class="btn btn-primary" type="submit">관심목록에 추가</button>
+				</form>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}

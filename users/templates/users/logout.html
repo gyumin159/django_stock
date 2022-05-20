@@ -1,0 +1,9 @@
+{% extends 'blog/base.html' %}
+{% block contents %}
+	<h2 class="mt-5 text-center">로그아웃 되었습니다.</h2>
+	<div class="mt-5 p-3 border-top">
+		<div class="d-flex justify-content-center">
+			<small class="text-muted">다시 로그인 하기</small><a class="btn btn-outline-info ms-3" href="{% url 'user-login' %}">로그인</a>
+		</div>
+	</div>
+{% endblock %}

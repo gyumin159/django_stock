@@ -1,0 +1,36 @@
+{% extends 'stock/base_stock.html' %}
+{% block contents %}
+<div>
+	<legend class="m-4">{{query}} - 검색 결과 <small class="text-muted">( {{page_obj.paginator.count}} )개</small></legend>
+	<div class="list-group">
+		{% for stock in page_obj %}
+			<a href="{% url 'stock-detail' stock.pk %}" class="list-group-item list-group-item-action">{{stock.company_name}} - <samll class="text-muted">{{stock.company_code}}</small></a>
+		{% endfor %}
+	</div>
+</div>
+<nav class="justify-content-center">
+	<ul class="pagination justify-content-center">
+		{% if page_obj.has_previous and page_obj.number != 2 %}
+			<li class="page-item"><a class="btn btn-outline-info" href="?kw={{query}}&page=1">맨 앞</a></li>
+			<li class="page-item"><a class="btn btn-outline-info" href="?kw={{query}}&page={{page_obj.previous_page_number}}">이전</a></li>
+		{% elif page_obj.number == 2 %}
+			<li class="page-item"><a class="btn btn-outline-info" href="?kw={{query}}&page={{page_obj.previous_page_number}}">이전</a></li>
+		{% endif %}
+
+		{% for num in page_obj.paginator.page_range %}
+			{% if page_obj.number == num %}
+				<li class="page-item"><a class="btn btn-info disabled" href="#">{{num}}</a></li>
+			{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+				<li class="page-item"><a class="btn btn-outline-info" href="?kw={{query}}&page={{num}}">{{num}}</a></li>
+			{% endif %}
+		{% endfor %}
+
+		{% if page_obj.has_next and page_obj.number != page_obj.paginator.num_pages|add:'-1' %} 
+			<li class="page-item"><a class="btn btn-outline-info" href="?kw={{query}}&page={{page_obj.next_page_number}}">다음</a></li>
+			<li class="page-item"><a class="btn btn-outline-info" href="?kw={{query}}&page={{page_obj.paginator.num_pages}}">마지막</a></li>
+		{% elif page_obj.number == page_obj.paginator.num_pages|add:'-1' %}
+			<li class="page-item"><a class="btn btn-outline-info" href="?kw={{query}}&page={{page_obj.next_page_number}}">다음</a></li>
+		{% endif %}
+	</ul>
+</nav>
+{% endblock %}

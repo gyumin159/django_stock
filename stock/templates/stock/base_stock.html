@@ -1,0 +1,75 @@
+{% load static %}
+{% load webpush_notifications %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{% webpush_header %}
+	<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<link rel="stylesheet" href="{% static 'blog/main.css' %}" type="text/css">
+	<title>Document</title>
+</head>
+<body>
+	<nav class="navbar nav-pills  bg-secondary bg-opacity-75 navbar-expand-xl">
+		<div class="row justify-content-start ms-3">
+			<a class="navbar-brand col text-dark" href="{% url 'blog-home' %}">By Django</a>
+			<a class="navbar-link col text-dark btn btn-outline-light btn-lg {{ status_blog }}" href="{% url 'blog-home' %}">Blog</a>
+			<a class="navbar-link col text-dark btn btn-outline-light btn-lg {{ status_stock }}" href="{% url 'stock-home' %}">Stock</a>
+		</div>
+		<div class="row navbar-nav ms-auto me-3">
+			{% if user.is_authenticated %}
+				<a class="navbar-link col text-dark btn btn-outline-light text-nowrap" href="{% url 'blog-create' %}">새 글</a>
+				<a class="navbar-link col text-dark btn btn-outline-light text-nowrap" href="{% url 'user-profile' %}">프로필</a>
+				<a class="navbar-link col text-dark btn btn-outline-light text-nowrap" href="{% url 'user-logout' %}">로그아웃</a>
+			{% else %}
+				<a class="navbar-link col text-dark btn btn-outline-light text-nowrap" href="{% url 'user-login' %}">로그인</a>
+				<a class="navbar-link col text-dark btn btn-outline-light text-nowrap" href="{% url 'user-register' %}">가입하기</a>
+			{% endif %}
+		</div>
+	</nav>
+	<div class="row">
+		<div class="col-md-9 border-end">
+			{% if messages %}
+				{% for message in messages %}
+					<div class="alert alert-{{message.tags}}">
+						{{message}}
+					</div>
+				{% endfor %}
+			{% endif %}
+		  	{% block contents %}{% endblock %}
+		</div>
+		<div class="col-md-3">
+		  	<div class="content-section">
+				<h3>관심 종목</h3>
+				{% webpush_button with_class="btn btn-outline-info p-2 m-2" %}
+				{% if user.is_authenticated %}
+					{% if interested_stocks %}
+						{% for stock in interested_stocks %}
+							<div class="d-flex justify-content-between">
+								<strong>{{stock.company_name}}</strong>
+								<form method="get" action="{% url 'stock-register' %}">
+									<input type="hidden" name="next" value="{{ request.get_full_path }}">
+									<button type="submit" class="btn btn-danger btn-sm ms-5" value="{{stock.company_code}}" name="company_code_del_side">제거</button>
+								</form>
+							</div>
+						{% endfor %}
+					{% else %}
+						<strong>종목 없음</strong>
+					{% endif %}
+				{% else %}
+					<strong>로그인 필요</strong>
+				{% endif %}
+		  	</div>
+		</div>
+	</div>
+
+	
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+
+</html>
